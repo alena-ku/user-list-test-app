@@ -3,6 +3,7 @@ package com.example.users.ui.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.users.R
 import com.example.users.mvp.models.User
@@ -26,13 +27,16 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
     var usersRecyclerView: RecyclerView? = null
 
     override fun openUserDetails(userId: Int) {
-        startActivity(Intent(activity, UserDetailsActivity::class.java))
+        startActivity(Intent(context, UserDetailsActivity::class.java))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         usersRecyclerView = view.findViewById<RecyclerView>(R.id.usersRecyclerView)
+        usersRecyclerView?.addItemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
         usersRecyclerView?.adapter = UsersAdapter(this)
     }
 
