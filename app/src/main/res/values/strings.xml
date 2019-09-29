@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Users</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Rentateam Test App</string>
+    <string name="title_users">Пользователи</string>
+    <string name="title_about">О программе</string>
+    <string name="title_activity_user_details">Пользователь</string>
+    <string name="text_about">Тестовое задание для Rentateam</string>
 </resources>
