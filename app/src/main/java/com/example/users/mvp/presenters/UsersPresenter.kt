@@ -1,15 +1,17 @@
 package com.example.users.mvp.presenters
 
+import android.util.Log
 import com.example.users.app.App
 import com.example.users.mvp.UsersService
 import com.example.users.mvp.models.User
 import com.example.users.mvp.views.UsersView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
-import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState
-class UsersPresenter : MvpPresenter<UsersView>() {
+class UsersPresenter : BasePresenter<UsersView>() {
 
     @Inject
     lateinit var usersService: UsersService
@@ -21,34 +23,17 @@ class UsersPresenter : MvpPresenter<UsersView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        val users = listOf(
-            User(1, "Name1","Surname1"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(2, "Name2","Surname2"),
-            User(3, "Name3","Surname3")
-        )
-        viewState.updateUsers(users);
+        val observable = usersService.getUses()
+
+        val subscription = observable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ users ->
+                viewState.updateUsers(users);
+            }, { error ->
+                Log.w("", "ERROR = $error")
+            })
+
+        unsubscribeOnDestroy(subscription)
     }
 
     fun onUserClick(user: User) {

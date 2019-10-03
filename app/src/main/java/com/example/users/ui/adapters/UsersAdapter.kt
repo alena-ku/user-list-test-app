@@ -32,7 +32,7 @@ class UsersAdapter(private val interaction: Interaction? = null) : ListAdapter<U
         }
 
         fun bind(item: User) = with(itemView) {
-            userTitleTextView.text = "${item.name} ${item.surname}"
+            userTitleTextView.text = "${item.firstName} ${item.lastName}"
         }
     }
 
