@@ -1,5 +1,7 @@
 package com.example.users.app
 
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.example.users.di.AppComponent
 import com.example.users.di.DaggerAppComponent
 import dagger.android.AndroidInjector
@@ -17,5 +19,10 @@ class App : DaggerApplication() {
             .build()
 
         return appComponent
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }
