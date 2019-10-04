@@ -1,6 +1,5 @@
 package com.example.users.mvp.presenters
 
-import android.util.Log
 import com.example.users.app.App
 import com.example.users.mvp.UsersService
 import com.example.users.mvp.models.User
@@ -41,6 +40,6 @@ class UsersPresenter : BasePresenter<UsersView>() {
     }
 
     fun onUserClick(user: User) {
-        viewState.openUserDetails(user.id)
+        viewState.openUserDetails(user)
     }
 }

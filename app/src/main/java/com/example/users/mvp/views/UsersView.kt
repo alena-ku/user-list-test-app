@@ -6,6 +6,6 @@ import moxy.MvpView
 interface UsersView : MvpView{
     fun toggleLoading(loading: Boolean)
     fun updateUsers(userNames: List<User>)
-    fun openUserDetails(userId: Int)
+    fun openUserDetails(user: User)
     fun loadingFailed(message: String)
 }

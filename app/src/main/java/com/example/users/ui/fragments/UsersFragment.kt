@@ -1,11 +1,9 @@
 package com.example.users.ui.fragments
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.example.users.R
 import com.example.users.mvp.models.User
 import com.example.users.mvp.presenters.UsersPresenter
@@ -28,12 +26,9 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
     @ProvidePresenter
     fun providePresenter(): UsersPresenter = UsersPresenter()
 
-    private lateinit var usersRecyclerView: RecyclerView
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        usersRecyclerView = view.findViewById<RecyclerView>(R.id.usersRecyclerView)
         usersRecyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
@@ -56,8 +51,8 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
             .show()
     }
 
-    override fun openUserDetails(userId: Int) {
-        startActivity(Intent(context, UserDetailsActivity::class.java))
+    override fun openUserDetails(user: User) {
+        UserDetailsActivity.start(context!!, user)
     }
 
     override fun userClicked(user: User) {
