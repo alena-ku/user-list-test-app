@@ -23,14 +23,18 @@ class UsersPresenter : BasePresenter<UsersView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
+        viewState.toggleLoading(true)
+
         val observable = usersService.getUses()
 
         val subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ users ->
                 viewState.updateUsers(users);
+                viewState.toggleLoading(false)
             }, { error ->
-                Log.w("", "ERROR = $error")
+                viewState.toggleLoading(false)
+                viewState.loadingFailed(error.localizedMessage)
             })
 
         unsubscribeOnDestroy(subscription)

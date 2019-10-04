@@ -7,7 +7,7 @@ import io.reactivex.Observable
 class UsersService(private val usersApi: UsersApi) {
 
     fun getUses(): Observable<List<User>> {
-        return usersApi.requestUsersInfo().map {
-                response -> response.data }
+        return usersApi.requestUsersInfo()
+            .map(UsersResponse::data)
     }
 }
