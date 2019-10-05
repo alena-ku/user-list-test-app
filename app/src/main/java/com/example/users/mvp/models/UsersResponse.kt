@@ -1,25 +1,24 @@
-package com.example.users.mvp
+package com.example.users.mvp.models
 
-import com.example.users.mvp.models.User
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class UsersResponse {
+class UsersResponse (
 
     @SerializedName("page")
     @Expose
-    var page: Int? = null
+    val page: Int,
     @SerializedName("per_page")
     @Expose
-    var perPage: Int? = null
+    val perPage: Int,
     @SerializedName("total")
     @Expose
-    var total: Int? = null
+    val total: Int,
     @SerializedName("total_pages")
     @Expose
-    var totalPages: Int? = null
+    val totalPages: Int,
     @SerializedName("data")
     @Expose
-    var data: List<User>? = null
+    val data: List<User>
 
-}
+)

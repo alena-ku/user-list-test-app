@@ -18,6 +18,7 @@ import moxy.presenter.ProvidePresenter
 class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
     UsersAdapter.Interaction {
 
+    private lateinit var usersAdapter: UsersAdapter
     private var errorDialog: AlertDialog? = null
 
     @InjectPresenter
@@ -32,7 +33,8 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
         usersRecyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
-        usersRecyclerView.adapter = UsersAdapter(this)
+        usersAdapter = UsersAdapter(this)
+        usersRecyclerView.adapter = usersAdapter
     }
 
     override fun toggleLoading(loading: Boolean) {
@@ -40,7 +42,7 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView,
     }
 
     override fun updateUsers(userNames: List<User>) {
-        (usersRecyclerView.adapter as UsersAdapter).submitList(userNames)
+        usersAdapter.submitList(userNames)
     }
 
     override fun loadingFailed(message: String) {

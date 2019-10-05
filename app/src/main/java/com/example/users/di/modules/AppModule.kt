@@ -1,7 +1,10 @@
 package com.example.users.di.modules
 
+import android.content.Context
+import androidx.room.Room
 import com.example.users.app.UsersApi
-import com.example.users.mvp.UsersService
+import com.example.users.data.AppDatabase
+import com.example.users.mvp.UsersRepository
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -11,12 +14,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class UsersServiceModule {
+class AppModule {
 
     @Provides
     @Singleton
-    fun provideUsersService(usersApi: UsersApi): UsersService {
-        return UsersService(usersApi)
+    fun provideAppDatabase(context: Context) : AppDatabase
+            = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java, "users.db"
+    ).build()
+
+    @Provides
+    @Singleton
+    fun provideUsersRepository(usersApi: UsersApi, appDatabase: AppDatabase): UsersRepository {
+        return UsersRepository(usersApi, appDatabase)
     }
 
     @Provides
@@ -24,6 +35,7 @@ class UsersServiceModule {
     fun provideUsersApi(retrofit: Retrofit): UsersApi {
         return retrofit.create(UsersApi::class.java)
     }
+
 
     @Provides
     @Singleton
@@ -34,4 +46,5 @@ class UsersServiceModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
 }

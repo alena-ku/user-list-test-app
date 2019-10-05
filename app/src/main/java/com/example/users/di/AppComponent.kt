@@ -1,8 +1,8 @@
 package com.example.users.di
 
-import android.app.Application
+import android.content.Context
 import com.example.users.app.App
-import com.example.users.di.modules.UsersServiceModule
+import com.example.users.di.modules.AppModule
 import com.example.users.di.modules.ViewsModule
 import com.example.users.mvp.presenters.UsersPresenter
 import dagger.BindsInstance
@@ -12,7 +12,11 @@ import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, ViewsModule::class, UsersServiceModule::class])
+@Component(modules = [
+    AndroidInjectionModule::class,
+    AppModule::class,
+    ViewsModule::class
+])
 interface AppComponent : AndroidInjector<App>  {
 
     @Component.Builder
@@ -20,7 +24,7 @@ interface AppComponent : AndroidInjector<App>  {
 
         fun build(): AppComponent
         @BindsInstance
-        fun application(application: Application): Builder
+        fun applicationContext(context: Context): Builder
     }
 
     fun inject(usersPresenter: UsersPresenter)

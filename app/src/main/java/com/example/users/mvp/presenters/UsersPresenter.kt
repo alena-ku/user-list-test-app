@@ -1,7 +1,7 @@
 package com.example.users.mvp.presenters
 
 import com.example.users.app.App
-import com.example.users.mvp.UsersService
+import com.example.users.mvp.UsersRepository
 import com.example.users.mvp.models.User
 import com.example.users.mvp.views.UsersView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class UsersPresenter : BasePresenter<UsersView>() {
 
     @Inject
-    lateinit var usersService: UsersService
+    lateinit var usersRepository: UsersRepository
 
     init {
         App.appComponent.inject(this)
@@ -22,21 +22,26 @@ class UsersPresenter : BasePresenter<UsersView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
+        unsubscribeOnDestroy(
+            usersRepository.getCachedUsers()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(viewState::updateUsers)
+        )
+
         viewState.toggleLoading(true)
 
-        val observable = usersService.getUses()
-
-        val subscription = observable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ users ->
-                viewState.updateUsers(users);
-                viewState.toggleLoading(false)
-            }, { error ->
-                viewState.toggleLoading(false)
-                viewState.loadingFailed(error.localizedMessage)
-            })
-
-        unsubscribeOnDestroy(subscription)
+        unsubscribeOnDestroy(
+            usersRepository.refresh()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    viewState.toggleLoading(false)
+                }, { error ->
+                    viewState.loadingFailed(error.localizedMessage)
+                    viewState.toggleLoading(false)
+                })
+        )
     }
 
     fun onUserClick(user: User) {

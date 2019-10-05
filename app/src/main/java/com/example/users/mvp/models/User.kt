@@ -1,29 +1,37 @@
 package com.example.users.mvp.models
 
+import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class User {
+@Entity
+data class User (
 
+    @Expose
     @SerializedName("id")
-    @Expose
-    var id: Int = 0
+    @ColumnInfo(name = "id")
+    @PrimaryKey
+    var id: Int,
 
-    @SerializedName("email")
     @Expose
-    var email: String? = null
-
     @SerializedName("first_name")
-    @Expose
-    lateinit var firstName: String
+    @ColumnInfo(name = "first_name")
+    var firstName: String,
 
+    @Expose
     @SerializedName("last_name")
-    @Expose
-    lateinit var lastName: String
+    @ColumnInfo(name = "last_name")
+    var lastName: String,
 
+    @Expose
+    @SerializedName("email")
+    @ColumnInfo(name = "email")
+    var email: String,
+
+    @Expose
     @SerializedName("avatar")
-    @Expose
-    var avatar: String? = null
+    @ColumnInfo(name = "avatar")
+    var avatar: String
 
-}
+)
 
