@@ -5,6 +5,7 @@ import com.example.users.data.AppDatabase
 import com.example.users.mvp.models.User
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 
 class UsersRepository(
     private val usersApi: UsersApi,
@@ -15,7 +16,16 @@ class UsersRepository(
 
     fun refresh() : Completable {
         return usersApi.requestUsersInfo(1)
-            .map {appDatabase.userDao().replaceAll(it.data)}
+            .flatMap { firstResponse ->
+                Observable.range(2, firstResponse.totalPages)
+                    .concatMap { page -> usersApi.requestUsersInfo(page).toObservable() }
+                    .reduce(
+                        ArrayList(firstResponse.data), { list, response ->
+                            list.addAll(response.data)
+                            list
+                        })
+                    .map { appDatabase.userDao().replaceAll(it) }
+            }
             .ignoreElement()
     }
 
